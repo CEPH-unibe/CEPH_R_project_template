@@ -88,7 +88,7 @@ outside a single research project it can be integrated in a formal package.
 ### The data-processing folder
 
 The `data-processing` folder contains scripts and code which describe your processing routine. 
-Following this routine, you convert the dat from the `data-raw` folder into analysis ready 
+Following this routine, you convert the data from the `data-raw` folder into analysis ready 
 data that is stored in the `data` folder. To ensure reproducibility, structure your processing 
 steps indicating both the order of the processing routine and the content or variables being processed.
 
