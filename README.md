@@ -173,6 +173,23 @@ analysis/
 ├─ 01_research_question1.R
 ```
 
+
+### The output folder
+
+The `output` folder contains, your results in the form of figures and tables which 
+were generated in your analysis. This output should be saved in subfolders by category of 
+the output.
+
+```
+output/
+├─ figures/
+├─ ├─ figure1.png
+├─ ├─ figure2.png
+├─ tables/
+├─ ├─ table1.csv
+├─ ├─ table2.csv
+```
+
 ### The vignettes folder
 
 The `vignettes` folder contains dynamic notebooks, i.e. R markdown files. These
