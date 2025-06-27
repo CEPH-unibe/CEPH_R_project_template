@@ -39,25 +39,24 @@ name should not change any of the functionality.
 git clone git@github.com:USER/YOUR_PROJECT.git
 ```
 
+<br>
+
 ## Structure
 
-The structure of the template follows the structure of an R package without
-actually being one. There are several reasons for this.
+The reasons for this folder structure.
 
-- Familiarizes you with an R package structure
-  - allowing for an optional switch to an R package
 - Avoids top level aggregation of data, code and reporting files
-- Splits the dynamic reporting from academic writing (`vignettes` vs. `manuscript`)
-- Splits pre-processing of data from working / included data (`data-raw` vs. `data`)
-- Splits R code from other scripts (bash / python in `src`)
-- Splits R functions from R analysis scripts (`R` vs `analysis`)
+- Splits pre-processing of data from working / included data (`data-proessing`vs. `data-raw` vs. `data`)
+- Splits R functions from R analysis scripts (`functions` vs `analysis`)
+- Splits the dynamic reporting from analysis output (`vignettes` vs. `output`)
+
 
 Below you find a comprehensive list of what goes where an why, as well as some
 best practices on how to structure further data within these folders.
 
-### The R folder
+### The functions folder
 
-The `R` folder contains R functions, not scripts. This means code wrapped in a
+The `functions` folder contains R functions, not scripts. This means code wrapped in a
 structure as such
 
 ```R
@@ -86,36 +85,43 @@ analysis. In addition, writing functions will make it easy to re-use the code
 within the context of a new project, and if proven to be generally useful
 outside a single research project it can be integrated in a formal package.
 
-### The src folder
+### The data-processing folder
 
-The `src` folder contains scripts and code which is not R related, in packages
-this folder often contains Fortran or C code which needs to be compiled. Here,
-it is common to store bash or python functions which might assist in data
-cleaning or data gathering which can't be done in R alone.
+The `data-processing` folder contains scripts and code which describe your processing routine. 
+Following this routine, you convert the dat from the `data-raw` folder into analysis ready 
+data that is stored in the `data` folder. To ensure reproducibility, structure your processing 
+steps indicating both the order of the processing routine and the content or variables being processed.
+
+```
+data-processing/
+├─ 01_processing_step1.R
+├─ 02_processing_step2.R
+├─ 03_processing_step3.R
+├─ 04_processing_step4.R
+├─ 05_processing_step5.R
+```
 
 ### The data-raw folder
 
 The `data-raw` folder contains, as the name suggests, raw data and the scripts
-to download and pre-process the data. This is data which requires significant
+to download the data. This is data which requires significant
 pre-processing to be of use in analysis. In other words, this data is not 
 analysis ready (within the context of the project).
 
 To create full transparency in terms of the source of this raw data it is best
-to include (numbered) scripts to download and pre-process the data. Either in
+to include (numbered) scripts to download the data. Either in
 these scripts, or in a separate README, include the source of the data (reference)
-Ultimately, the output of the workflow in data-raw is data which is analysis ready.
 
 It is best practice to store various raw data products in their own sub-folder,
-with data downloading and processing scripts in the main `data-raw` folder.
+with data downloading in the main `data-raw` folder.
 
 ```
 data-raw/
 ├─ raw_data_product/
 ├─ 00_download_raw_data.R
-├─ 01_process_raw_data.R
 ```
 
-Where possible it is good practice to store output data (in `data`) either as human 
+Where possible it is good practice to store output data (in `output`) either as human 
 readable CSV files, or as R serialized files 
 (generated using with the `saveRDS()` function).
 
@@ -130,7 +136,7 @@ to raw-data outside the project directory.
 ### The data folder
 
 The `data` folder contains analysis ready data. This is data which you can use,
-as is. This often contains the output of a `data-raw` pre-processing workflow,
+as is. This often contains the output of a `data--processing` pre-processing workflow,
 but can also include data which doesn't require any intervention, e.g. a land
 cover map which is used as-is. Output from `data-raw` often undergoes a
 dramatic dimensionality reduction and will often fit github file size limits. In
@@ -153,12 +159,8 @@ data/
 
 The `analysis` folder contains, *surprise*, R scripts covering analysis of your
 analysis ready data (in the `data` folder). These are R scripts with output
-which is limited to numbers, tables and figures. It should not include R
-markdown code!
-
-It is often helpful to create additional sub-folders for statistics and figures,
-especially if figures are large and complex (i.e. visualizations, rather than
-graphical representations of statistical properties, such as maps). 
+which is limited to numbers, tables and figures, which you will store in the 
+`output` folder. It should not include R markdown code!
 
 Scripts can have a numbered prefix to indicate an order of execution, but this
 is generally less important as you will work on analysis ready data. If there
@@ -167,62 +169,20 @@ prefixes.
 
 ```
 analysis/
-├─ statistics/
-│  ├─ 00_random_forest_model.R
-│  ├─ 01_random_forest_tuning.R
-├─ figures/
-│  ├─ global_model_results_map.R
-│  ├─ complex_process_visualization.R
+├─ 00_crossbasis_parameters.R
+├─ 01_research_question1.R
 ```
-
-Output of the analysis routines can be written to file (`manuscript` folder) or
-visualized on the console or plot viewer panel.
-
-### The manuscript folder
-
-The `manuscript` folder contains a true working document often written in an 
-external word processing software. It also, at times, contain the output of 
-any analysis script, such as tables and rendered figures.
-
-Thee can be an R markdown file if for example suitable templates can be found in
-the [`rticles`](https://pkgs.rstudio.com/rticles/) R package to facilitate 
-publication. However, the use of R markdown should be done with much care 
-(see notes on the `vignettes` folder). As before, use sub-folders to organize
-this work neatly.
 
 ### The vignettes folder
 
 The `vignettes` folder contains dynamic notebooks, i.e. R markdown files. These
-might serve a dual use between analysis and manuscript. However, the use case
-in reality should be considered very narrowly. In general, as they are commonly
-used, R markdown files are rarely portable. The argument that it is easy to 
-share rendered html files is invalid if you adhere to an open workflow with
-github based snapshots. The latter ensures that all code is visible, all data
-is visible, and the project is truly reproducible. Furthermore, R markdown
-documents mix two cognitive tasks, writing text and writing code. Switching
-between these two modes comes with undue overhead. If you code, you should not
-be writing prose, and vise versa.
-
-Unless applied to small, educational, examples a markdown file has little place
-in a code heavy environment. In short, if your R markdown file contains more 
-code than it does text, it should be considered an R script or function 
-(with comments or documentation). Conversely, if your markdown file contains
-more text than code it probably is easier to collaborate on a true word 
-processing file (or a Google Docs file). The use case where the notebooks might
-serve some importance is true reporting of general statistics.
-
-Finally, the use of R markdown also encourages bad project management practices.
-Most commonly this originates from the fact that rendering of the document is
-relative to the location of the document itself. If no session management tools
-such as the package [`here`](https://here.r-lib.org/) are used this automatically
-causes files to pile up in the top most level of a project, undoing most efforts
-to structure data and code. This is further compounded by the fact that there is
-a tendency to remain within the working environment (document), and therefore 
-code blocks which should be functions are not translated as such.
+might serve a dual use between analysis and manuscript. They can be used to present
+small, educational, examples, and preliminary output to peers with code examples, 
+but should not be used as a integral part of the analysis. 
 
 In short, R markdown files have their function in reporting results, once
 generated (through functions or analysis scripts) but should be avoided to
-develop code / ideas (see cognitive switching remark)!
+develop code / ideas!
 
 ### Capturing your session state
 
