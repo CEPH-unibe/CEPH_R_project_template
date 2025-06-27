@@ -1,16 +1,12 @@
-# The GECO R project template
+# The CEPH R project template
 
-This is a github template for a GECO R project repository. This template can
+This is a github template for a CEPH R project repository. This template can
 be loaded when creating a new project in github. As such you pre-populate a
 project with a standard set of directories. This ensures a project-oriented 
-and consistent workflow across all lab members, and removes some of the mental
+and consistent workflow across all group members, and removes some of the mental
 overhead in making decisions on a project structure.
 
-It must be noted that some of the functionality as provided by this setup is
-included in the [`usethis`](https://usethis.r-lib.org/) R package, the aim is 
-slightly different. For one, `usethis` is aimed at populating a package structure.
-Second, there is not preset full template, hence many individual decisions still
-need to be made and code executed. This is bypassed by this setup.
+This template was created based on the [template](https://github.com/geco-bern/R_proj_template) by the [geco-bern](https://github.com/geco-bern) group.
 
 ## Use
 
