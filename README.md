@@ -201,6 +201,12 @@ In short, R markdown files have their function in reporting results, once
 generated (through functions or analysis scripts) but should be avoided to
 develop code / ideas!
 
+### Sensitive data
+
+Much of the data we are using cannot be made public due to sensitivity  reasons. For this we need to specify in the `.gitignore` file in this repository that the contents of the this file are not seen by git and GitHub. You can also specify other files to not be seen by git/GitHub, e.g. shapefiles which can be very big and are not needed on GitHub. Large files take up unnecessary space and should be kept from GitHub.
+
+By default, the content of all data folders: `data`, `data-raw` will not be seen by git/GitHub. 
+
 ### Capturing your session state
 
 If you want to ensure full reproducibility you will need to capture the state of the system and libraries with which you ran the original analysis. Note that you will have to execute all code and required libraries for `renv` to correctly capture all used libraries.
